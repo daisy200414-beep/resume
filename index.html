@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>个人简历</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #0f172a; --bg2: #1e293b; --card: #1e293b; --card-hover: #263348;
+  --border: rgba(148,163,184,0.1); --border-hover: rgba(56,189,248,0.3);
+  --text: #e2e8f0; --text2: #94a3b8; --text3: #64748b;
+  --accent: #38bdf8; --accent2: #818cf8; --accent-dim: rgba(56,189,248,0.1);
+  --highlight: #67e8f9; --highlight2: #a5b4fc;
+  --award: #fbbf24; --inprogress: #fb923c;
+  --radius: 16px; --radius-sm: 10px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg); color: var(--text); line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::before {
+  content: ''; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 600px 400px at 20% 10%, rgba(56,189,248,0.04) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 500px at 80% 80%, rgba(129,140,248,0.03) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+  animation: bgShift 20s ease-in-out infinite alternate;
+}
+@keyframes bgShift { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
+.container { max-width: 860px; margin: 0 auto; padding: 60px 24px 80px; position: relative; z-index: 1; }
+
+/* ===== Header ===== */
+.header { text-align: center; margin-bottom: 64px; position: relative; }
+.header::before {
+  content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,189,248,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header h1 {
+  font-size: 2.8rem; font-weight: 800; letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 30%, #818cf8 70%, #a78bfa 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header .role { font-size: 0.95rem; color: var(--text2); margin-top: 8px; font-weight: 400; letter-spacing: 0.02em; }
+.header .slogan { font-size: 0.92rem; color: var(--accent); margin-top: 16px; font-weight: 400; font-style: italic; opacity: 0.85; }
+.header .contact { font-size: 0.82rem; color: var(--text3); margin-top: 10px; }
+
+/* ===== Section ===== */
+.section { margin-bottom: 56px; }
+.section-title {
+  font-size: 0.82rem; font-weight: 600; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::before {
+  content: ''; width: 3px; height: 16px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+}
+
+/* ===== About ===== */
+.about-text { color: var(--text2); font-size: 0.95rem; line-height: 2; font-weight: 300; }
+.quote-block {
+  border-left: 3px solid var(--accent); padding: 12px 20px; margin: 16px 0;
+  background: var(--accent-dim); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  color: var(--text2); font-size: 0.88rem; font-style: italic; font-weight: 300; line-height: 1.8;
+}
+
+/* ===== Experience Card ===== */
+.exp-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 28px 28px 24px; margin-bottom: 16px; transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.exp-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.25s;
+}
+.exp-card:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.exp-card:hover::before { opacity: 1; }
+.exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.exp-company { font-size: 1.05rem; font-weight: 600; letter-spacing: -0.01em; }
+.exp-role { color: var(--accent); font-size: 0.82rem; margin-top: 2px; font-weight: 400; }
+.exp-period {
+  color: #fb923c; font-size: 0.76rem; white-space: nowrap;
+  background: rgba(251,146,60,0.08); padding: 3px 10px; border-radius: 20px; font-weight: 400;
+}
+.exp-bg {
+  color: var(--text3); font-size: 0.8rem; margin-bottom: 14px; font-weight: 300;
+  border-left: 2px solid var(--border); padding-left: 10px; line-height: 1.7;
+}
+.exp-details { list-style: none; padding: 0; margin: 0 0 18px; }
+.exp-details li {
+  color: var(--text2); font-size: 0.87rem; padding: 6px 0 6px 18px;
+  position: relative; line-height: 1.85; font-weight: 300;
+  border-bottom: 1px solid rgba(148,163,184,0.05);
+}
+.exp-details li:last-child { border-bottom: none; }
+.exp-details li::before {
+  content: ''; position: absolute; left: 2px; top: 14px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2)); opacity: 0.7;
+}
+.exp-details li strong, .hl { color: var(--highlight); font-weight: 500; }
+.metric {
+  display: inline-block; background: rgba(56,189,248,0.08);
+  border: 1px solid rgba(56,189,248,0.2); color: var(--accent);
+  font-size: 0.75rem; padding: 1px 8px; border-radius: 12px; font-weight: 500;
+  margin: 0 2px;
+}
+.tech-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 4px; }
+.tech-tag {
+  background: rgba(129,140,248,0.06); border: 1px solid rgba(129,140,248,0.12);
+  color: var(--accent2); font-size: 0.7rem; padding: 2px 10px; border-radius: 20px;
+  font-weight: 400; transition: all 0.2s;
+}
+.tech-tag:hover { background: rgba(129,140,248,0.12); border-color: rgba(129,140,248,0.25); }
+
+/* ===== Currently badge ===== */
+.currently-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.7rem; color: #4ade80; font-weight: 500; margin-left: 8px; vertical-align: middle;
+}
+.currently-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #4ade80; animation: pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.8); } }
+
+/* ===== Internship timeline ===== */
+.internship-list { position: relative; padding-left: 24px; }
+.internship-list::before {
+  content: ''; position: absolute; left: 7px; top: 28px; bottom: 28px; width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+  opacity: 0.2; border-radius: 1px;
+}
+.internship-list .exp-card { position: relative; }
+.internship-list .exp-card::after {
+  content: ''; position: absolute; left: -21px; top: 32px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--card); border: 2px solid var(--accent);
+  transition: background 0.25s, border-color 0.25s;
+}
+.internship-list .exp-card:hover::after { background: var(--accent); }
+
+/* ===== Skills ===== */
+.skills-list { list-style: none; padding: 0; }
+.skills-list li {
+  background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 22px; margin-bottom: 8px; display: flex; align-items: flex-start;
+  gap: 20px; transition: all 0.25s;
+}
+.skills-list li:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.skill-cat { font-weight: 500; color: var(--accent2); font-size: 0.82rem; min-width: 90px; flex-shrink: 0; padding-top: 1px; }
+.skill-items-inline { color: var(--text2); font-size: 0.84rem; line-height: 1.7; font-weight: 300; }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; margin-top: 64px; padding-top: 24px;
+  border-top: 1px solid var(--border); color: var(--text3); font-size: 0.78rem;
+}
+
+/* ===== Side Decorations ===== */
+.side-deco { position: fixed; z-index: 0; pointer-events: none; opacity: 0.15; }
+.side-deco.left-top { top: 8%; left: 2%; width: 180px; height: 180px; border: 2px solid var(--accent); border-radius: 50%; animation: floatA 8s ease-in-out infinite; }
+.side-deco.left-mid { top: 45%; left: 3%; width: 60px; height: 60px; border: 2px solid var(--accent2); border-radius: 12px; animation: floatB 7s ease-in-out infinite; }
+.side-deco.left-bot { bottom: 15%; left: 1.5%; width: 0; height: 0; border-left: 40px solid transparent; border-right: 40px solid transparent; border-bottom: 70px solid var(--accent); animation: floatC 9s ease-in-out infinite; }
+.side-deco.right-top { top: 12%; right: 2%; width: 100px; height: 100px; border: 2px solid var(--accent2); border-radius: 16px; transform: rotate(15deg); animation: floatB 8s ease-in-out infinite reverse; }
+.side-deco.right-mid { top: 50%; right: 3%; width: 140px; height: 140px; border: 2px solid var(--accent); border-radius: 50%; animation: floatA 9s ease-in-out infinite; }
+.side-deco.right-bot { bottom: 10%; right: 2%; width: 50px; height: 50px; background: var(--accent2); border-radius: 50%; animation: floatC 6s ease-in-out infinite; }
+@keyframes floatA { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(8deg); } }
+@keyframes floatB { 0%,100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(55deg) translateY(-24px); } }
+@keyframes floatC { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-20px) scale(1.1); } }
+.dot-grid { position: fixed; z-index: 0; pointer-events: none; opacity: 0.1; }
+.dot-grid.left { top: 25%; left: 1%; width: 80px; height: 200px; background-image: radial-gradient(circle, var(--accent) 2px, transparent 2px); background-size: 16px 16px; animation: gridPulse 6s ease-in-out infinite; }
+.dot-grid.right { top: 60%; right: 1%; width: 80px; height: 200px; background-image: radial-gradient(circle, var(--accent2) 2px, transparent 2px); background-size: 16px 16px; animation: gridPulse 8s ease-in-out infinite 2s; }
+@keyframes gridPulse { 0%,100% { opacity: 0.1; } 50% { opacity: 0.18; } }
+
+/* ===== Scroll fade-in ===== */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== Tag row for category sections ===== */
+.detail-title {
+  font-size: 0.78rem; font-weight: 600; color: var(--accent);
+  letter-spacing: 0.05em; margin-bottom: 4px; margin-top: 2px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+  .header h1 { font-size: 2rem; }
+  .exp-header { flex-direction: column; gap: 4px; }
+  .skills-list li { flex-direction: column; gap: 4px; }
+  .container { padding: 36px 16px 60px; }
+  .internship-list { padding-left: 18px; }
+  .internship-list .exp-card::after { left: -15px; }
+  .side-deco, .dot-grid { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="side-deco left-top"></div>
+<div class="side-deco left-mid"></div>
+<div class="side-deco left-bot"></div>
+<div class="side-deco right-top"></div>
+<div class="side-deco right-mid"></div>
+<div class="side-deco right-bot"></div>
+<div class="dot-grid left"></div>
+<div class="dot-grid right"></div>
+
+<div class="container" id="app"></div>
+
+<script>
+const data = {
+  profile: {
+    name: "Daisy",
+    role: "直播运营 / 电商运营",
+    slogan: "用数据驱动决策，用增长验证策略。",
+    contact: "欢迎联系"
+  },
+  about: "专注直播运营与电商增长方向，具备从指标体系搭建、活动策略设计到跨部门协同的全链路运营能力。擅长通过数据分析定位业务问题，提炼 SOP 并推动团队复用，拥有快手、喜马拉雅等平台的实战经验。",
+  internships: [
+    {
+      company: "快手",
+      role: "直播活动运营实习生",
+      period: "2026.03 - 至今",
+      current: true,
+      bg: "负责平台主播成长类活动全链路执行，主导「导师制」大带小玩法落地，服务新小主播跃迁与平台看播增长目标。",
+      details: [
+        "**活动策略设计与迭代**：复盘发现过程指标到结果指标（主动心智）传导效率低，拆解行为路径后提出「粉丝增长量 + 直播分享量」作为新过程指标，完成验证与落地，活动期间用户主动看播心智同比提升 **35%**，主播跃迁率 **17%**",
+        "**指标监控与项目推进**：搭建活动监控体系，跟踪任务达成与风险点，社群触达 **5000+ 主播**，独立完成活动复盘分析并输出优化建议",
+        "**活动复盘与问题诊断**：基于数据分析与典型案例挖掘，定位「活动声量不足、主播初期开播活力弱」两大核心问题并推动优化方案落地，二期参与人数提升 **35%**，任务总达成率提升 **45%**",
+        "**流程产品化优化**：推动报名链路从腾讯文档人工报名升级为 H5 自助认领，完成流程设计、审批与协同答疑，沉淀团队可复用 SOP，报名转化效率提升 **96 倍**"
+      ],
+      tech: ["指标体系", "活动运营", "数据复盘", "流程优化", "SOP沉淀"]
+    },
+    {
+      company: "谷雨",
+      role: "电商直播运营实习生",
+      period: "2025.09 - 2026.01",
+      current: false,
+      bg: "负责快手渠道店铺货架与自播直播间全流程运营，支撑多场大促直播与达人合作项目落地。",
+      details: [
+        "**数据监控与预警体系**：围绕北极星指标搭建日/周报分析体系，基于历史达标场次建立目标进度基准线并设定分层预警阈值，实现直播场中异常实时识别与干预；干预后分时 GMV 贡献率由不足 **5%** 回升至 **7%-8%**，多场大场直播爆发系数稳定 **3.50+**，并总结为 SOP 供团队复用",
+        "**直播活动运营**：推进联名官宣活动，统筹人货场与跨部门资源，制定并落地执行方案；活动 GMV 爆发系数达 **2.43**，活动时段 GMV 达 **2w**",
+        "**达播合作运营**：跨部门推进明星进店双开直播合作，制定营销策略与货盘方案，独立复盘并沉淀方法论；多场直播 GMV 爆发系数稳定 **3.50+**",
+        "**爆品孵化与商城增长**：负责商城选品与投流资源调配，通过销售数据分析、商品画像与竞品调研完成系统分层，制定差异化经营策略；执行后商城板块 GMV 月环比提升 **95%**"
+      ],
+      tech: ["电商直播", "数据监控", "GMV增长", "达播运营", "选品投流"]
+    },
+    {
+      company: "喜马拉雅",
+      role: "直播运营实习生",
+      period: "2025.06 - 2025.09",
+      current: false,
+      bg: "负责知识付费产品 IP 孵化中的获客直播运营，覆盖直播执行到用户承接转化全流程。",
+      details: [
+        "**主播孵化**：搭建账号基建、培训主播并复盘迭代，成功孵化主播 **5 人**，直播平均转化率达 **7%**",
+        "**直播脚本优化**：基于用户痛点调研与平台推流机制，输出适配抖音直播间的通用脚本，平均转化率达 **11%**",
+        "**漏斗复盘与优化**：通过漏斗模型拆解直播全链路，精准定位关键流失点并推动策略落地，直播转化率提升 **20%**"
+      ],
+      tech: ["主播孵化", "内容运营", "转化率优化", "漏斗分析"]
+    },
+    {
+      company: "兴趣岛",
+      role: "运营实习生",
+      period: "2024.10 - 2025.03",
+      current: false,
+      bg: "负责知识付费 IP 课程的私域直播运营与 IP 账号打造。",
+      details: [
+        "**账号运营与内容创作**：负责 IP 人设账号全平台运营，独立完成海报设计（可画/PS）、视频剪辑（剪映）与多平台分发（视频号/公众号）",
+        "**导流 SOP 设计与增长**：设计并量化验证导流 SOP，沉淀为团队标准流程；视频号 1 个月增粉 **1.2w**、播放量 **65w**，公众号文章平均阅读量 **800+**，单月内容转化体验学员 **100+**"
+      ],
+      tech: ["私域运营", "内容创作", "IP账号", "SOP设计"]
+    }
+  ],
+  skills: [
+    { category: "数据分析", items: ["SQL（子查询、窗口函数、Join等复杂查询）", "Excel（Vlookup、透视表）", "Tableau（看板搭建、数据可视化）", "Python（pandas、numpy、scipy、matplotlib）"] },
+    { category: "AI 工具", items: ["AI智能体搭建", "自动化工作流设计", "业务流程提效（数据处理效率提升96倍）"] },
+    { category: "运营能力", items: ["指标体系搭建", "活动策略设计", "数据复盘", "SOP沉淀", "跨部门协同"] },
+    { category: "语言", items: ["英语 CET-6，良好听说读写能力，可阅读英文材料"] },
+    { category: "其他", items: ["计算机二级证书"] }
+  ]
+};
+
+function hl(text) {
+  return text.replace(/\*\*(.+?)\*\*/g, '<span class="hl">$1</span>');
+}
+
+function render() {
+  let html = '';
+
+  // Header
+  html += `
+  <div class="header fade-in">
+    <h1>${data.profile.name}</h1>
+    <div class="role">${data.profile.role}</div>
+    <div class="slogan">"${data.profile.slogan}"</div>
+    <div class="contact">${data.profile.contact}</div>
+  </div>`;
+
+  // About
+  html += `
+  <div class="section fade-in">
+    <div class="section-title">关于我</div>
+    <div class="about-text">${data.about}</div>
+  </div>`;
+
+  // Internships
+  html += `
+  <div class="section fade-in">
+    <div class="section-title">实习经历</div>
+    <div class="internship-list">
+      ${data.internships.map(item => `
+        <div class="exp-card fade-in">
+          <div class="exp-header">
+            <div>
+              <div class="exp-company">${item.company}${item.current ? '<span class="currently-badge">当前</span>' : ''}</div>
+              <div class="exp-role">${item.role}</div>
+            </div>
+            <div class="exp-period">${item.period}</div>
+          </div>
+          <div class="exp-bg">${item.bg}</div>
+          <ul class="exp-details">
+            ${item.details.map(d => `<li>${hl(d)}</li>`).join('')}
+          </ul>
+          <div class="tech-row">
+            ${item.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>`;
+
+  // Skills
+  html += `
+  <div class="section fade-in">
+    <div class="section-title">技能 & 工具</div>
+    <ul class="skills-list">
+      ${data.skills.map(s => `
+        <li class="fade-in">
+          <span class="skill-cat">${s.category}</span>
+          <span class="skill-items-inline">${s.items.join('　·　')}</span>
+        </li>
+      `).join('')}
+    </ul>
+  </div>`;
+
+  // Footer
+  html += `<div class="footer fade-in">Made with purpose, not perfection.</div>`;
+
+  return html;
+}
+
+const app = document.getElementById('app');
+app.innerHTML = render();
+
+// Scroll fade-in observer
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
