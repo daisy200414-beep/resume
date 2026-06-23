@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daisy - 简历 · 面试 · 职场辅导</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --bg: #f8faf9;
+  --bg2: #ffffff;
+  --card: #ffffff;
+  --card-hover: #f0faf8;
+  --border: rgba(13,148,136,0.12);
+  --border-hover: rgba(13,148,136,0.35);
+  --text: #1a2e2b;
+  --text2: #4a6b66;
+  --text3: #8aaba6;
+  --accent: #0d9488;
+  --accent2: #2dd4bf;
+  --accent-dim: rgba(13,148,136,0.08);
+  --highlight: #0d9488;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background 0.4s, color 0.4s;
+}
+
+/* ===== 右上角 Toggle ===== */
+.mode-toggle {
+  position: fixed; top: 24px; right: 24px; z-index: 100;
+  display: flex; align-items: center; gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px; padding: 7px 16px 7px 12px;
+  cursor: pointer; user-select: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 16px rgba(13,148,136,0.10);
+}
+.mode-toggle:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px rgba(13,148,136,0.18);
+}
+.mode-toggle .toggle-icon { font-size: 1.05rem; transition: transform 0.4s; }
+.mode-toggle:hover .toggle-icon { transform: rotate(12deg); }
+.mode-toggle .toggle-label { font-size: 0.78rem; color: var(--text2); font-weight: 500; letter-spacing: 0.02em; }
+.toggle-track {
+  width: 36px; height: 20px; border-radius: 10px;
+  background: var(--border); position: relative; transition: background 0.3s;
+}
+.toggle-thumb {
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); position: absolute; top: 2px; left: 2px;
+  transition: transform 0.3s ease;
+}
+body.resume-mode .toggle-thumb { transform: translateX(16px); }
+body.resume-mode .toggle-track { background: rgba(13,148,136,0.2); }
+
+/* ===== 页面切换 ===== */
+#coaching-page { transition: opacity 0.35s, transform 0.35s; }
+#resume-page {
+  display: none; opacity: 0;
+  transition: opacity 0.35s, transform 0.35s;
+}
+body.resume-mode #coaching-page { display: none; }
+body.resume-mode #resume-page { display: block; opacity: 1; }
+
+.page-switching { opacity: 0; transform: translateY(10px); }
+
+/* ===== 背景装饰 ===== */
+body::before {
+  content: ''; position: fixed; inset: 0;
+  background:
+    radial-gradient(ellipse 700px 500px at 10% 5%, rgba(45,212,191,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 600px at 90% 90%, rgba(13,148,136,0.04) 0%, transparent 70%);
+  pointer-events: none; z-index: 0;
+}
+
+.container { max-width: 800px; margin: 0 auto; padding: 72px 24px 80px; position: relative; z-index: 1; }
+
+/* ===== Hero ===== */
+.hero { text-align: center; margin-bottom: 72px; }
+.hero h1 {
+  font-size: 2.6rem; font-weight: 800; letter-spacing: -0.025em;
+  background: linear-gradient(135deg, #0d9488 0%, #2dd4bf 60%, #06b6d4 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.2; margin-bottom: 18px;
+}
+.hero .subtitle {
+  font-size: 1rem; color: var(--text2); font-weight: 400;
+  line-height: 1.7; max-width: 480px; margin: 0 auto 20px;
+}
+.hero .contact-bar {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; font-size: 0.82rem; color: var(--text3); margin-top: 4px;
+}
+.hero .contact-bar .wechat-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--accent-dim); border: 1px solid var(--border);
+  color: var(--accent); padding: 5px 14px; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 500; cursor: pointer;
+  transition: all 0.2s;
+}
+.hero .contact-bar .wechat-tag:hover {
+  background: rgba(13,148,136,0.14); border-color: var(--border-hover);
+}
+.hero .price-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, rgba(13,148,136,0.08), rgba(45,212,191,0.08));
+  border: 1px solid rgba(13,148,136,0.2);
+  color: var(--accent); padding: 5px 16px; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 600; margin-top: 20px;
+}
+
+/* ===== Section ===== */
+.section { margin-bottom: 60px; }
+.section-title {
+  font-size: 1rem; font-weight: 700; color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.section-title::before {
+  content: ''; width: 3px; height: 16px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+}
+
+/* ===== 适合谁 - 竖向列表 ===== */
+.who-list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.who-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+  display: flex; align-items: flex-start; gap: 14px;
+  transition: all 0.25s;
+}
+.who-item:hover {
+  border-color: var(--border-hover);
+  background: var(--card-hover);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px rgba(13,148,136,0.08);
+}
+.who-emoji { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+.who-text { font-size: 0.92rem; color: #2d4a45; line-height: 1.75; font-weight: 400; }
+.who-text strong { color: #1a2e2b; font-weight: 700; }
+
+/* ===== 我能提供什么 - 3列卡片 ===== */
+.offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.offer-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 22px 20px;
+  transition: all 0.25s; position: relative; overflow: hidden;
+}
+.offer-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.25s;
+}
+.offer-card:hover { border-color: var(--border-hover); background: var(--card-hover); box-shadow: 0 4px 20px rgba(13,148,136,0.08); }
+.offer-card:hover::before { opacity: 1; }
+.offer-icon { font-size: 1.6rem; margin-bottom: 10px; }
+.offer-title { font-size: 0.95rem; font-weight: 600; color: var(--text); margin-bottom: 8px; }
+.offer-desc { font-size: 0.82rem; color: var(--text2); line-height: 1.7; font-weight: 300; }
+
+/* ===== 我做过什么 - 简洁时间轴 ===== */
+.timeline { position: relative; padding-left: 20px; }
+.timeline::before {
+  content: ''; position: absolute; left: 5px; top: 16px; bottom: 16px; width: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2), transparent);
+  opacity: 0.25; border-radius: 1px;
+}
+.timeline-item {
+  position: relative; margin-bottom: 20px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 16px 20px;
+  transition: all 0.25s;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+.timeline-item::before {
+  content: ''; position: absolute; left: -17px; top: 20px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--card); border: 2px solid var(--accent);
+  transition: background 0.25s;
+}
+.timeline-item:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.timeline-item:hover::before { background: var(--accent); }
+.timeline-company { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.timeline-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.timeline-tag {
+  background: var(--accent-dim); border: 1px solid var(--border);
+  color: var(--accent); font-size: 0.7rem; padding: 2px 10px;
+  border-radius: 20px; font-weight: 500;
+}
+.currently-dot {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.7rem; color: #10b981; font-weight: 500; margin-left: 8px;
+}
+.currently-dot::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: #10b981; animation: pulse-green 2s ease-in-out infinite;
+}
+@keyframes pulse-green { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
+
+/* ===== 时间轴详情条目 ===== */
+.timeline-detail {
+  list-style: none; font-size: 0.82rem; color: var(--text2);
+  padding: 4px 0 4px 16px; position: relative; line-height: 1.8;
+  font-weight: 300;
+}
+.timeline-detail::before {
+  content: ''; position: absolute; left: 2px; top: 11px;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--accent); opacity: 0.5;
+}
+.timeline-detail strong { color: var(--accent); font-weight: 600; }
+
+/* ===== CTA 区域 ===== */
+.cta-section {
+  text-align: center; padding: 40px 32px; margin-top: 8px;
+  background: linear-gradient(135deg, rgba(13,148,136,0.05), rgba(45,212,191,0.05));
+  border: 1px solid var(--border); border-radius: var(--radius);
+}
+.cta-section h3 { font-size: 1.2rem; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+.cta-section p { font-size: 0.88rem; color: var(--text2); margin-bottom: 20px; }
+.cta-wechat {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent); color: white;
+  padding: 10px 28px; border-radius: 30px; font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; transition: all 0.25s; border: none;
+  box-shadow: 0 4px 14px rgba(13,148,136,0.3);
+}
+.cta-wechat:hover { background: #0f766e; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(13,148,136,0.4); }
+.cta-note { font-size: 0.76rem; color: var(--text3); margin-top: 12px; }
+
+/* ===== Footer ===== */
+.footer {
+  text-align: center; margin-top: 56px; padding-top: 20px;
+  border-top: 1px solid var(--border); color: var(--text3); font-size: 0.76rem;
+}
+
+/* ===== 简历页容器（resume-mode 时显示） ===== */
+#resume-page .resume-wrap {
+  max-width: 860px; margin: 0 auto; padding: 72px 24px 80px;
+  position: relative; z-index: 1;
+}
+
+/* ===== Scroll fade-in ===== */
+.fade-in {
+  opacity: 0; transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+}
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* 辅导页 stagger 延迟：触发 visible 后各自的 delay */
+#coaching-page .who-item:nth-child(2).fade-in { transition-delay: 80ms; }
+#coaching-page .who-item:nth-child(3).fade-in { transition-delay: 160ms; }
+#coaching-page .who-item:nth-child(4).fade-in { transition-delay: 240ms; }
+#coaching-page .offer-card:nth-child(2).fade-in { transition-delay: 100ms; }
+#coaching-page .offer-card:nth-child(3).fade-in { transition-delay: 200ms; }
+#coaching-page .timeline-item:nth-child(2).fade-in { transition-delay: 90ms; }
+#coaching-page .timeline-item:nth-child(3).fade-in { transition-delay: 180ms; }
+#coaching-page .timeline-item:nth-child(4).fade-in { transition-delay: 270ms; }
+
+/* ===== 简历页内嵌样式（和 index.html 保持一致但主题适配） ===== */
+body.resume-mode {
+  --bg: #0a1f1e; --bg2: #112322; --card: #132e2c; --card-hover: #1a3c39;
+  --border: rgba(45,212,191,0.12); --border-hover: rgba(45,212,191,0.35);
+  --text: #e0f7f5; --text2: #7eccc6; --text3: #4a8f8a;
+  --accent: #2dd4bf; --accent2: #5eead4; --accent-dim: rgba(45,212,191,0.10);
+  --highlight: #99f6e4;
+}
+body.resume-mode::before {
+  background:
+    radial-gradient(ellipse 700px 500px at 15% 8%, rgba(45,212,191,0.07) 0%, transparent 70%),
+    radial-gradient(ellipse 500px 600px at 85% 85%, rgba(13,148,136,0.05) 0%, transparent 70%);
+}
+/* 简历页 header */
+.r-header { text-align: center; margin-bottom: 64px; position: relative; }
+.r-header h1 {
+  font-size: 2.8rem; font-weight: 800; letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #99f6e4 0%, #2dd4bf 40%, #0d9488 80%, #065f46 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.r-header .r-role { font-size: 0.95rem; color: var(--text2); margin-top: 8px; font-weight: 400; }
+.r-header .r-slogan { font-size: 0.92rem; color: var(--accent); margin-top: 14px; font-style: italic; opacity: 0.85; }
+.r-header .r-contact { font-size: 0.82rem; color: var(--text3); margin-top: 8px; }
+/* 简历 section */
+.r-section { margin-bottom: 56px; }
+.r-section-title {
+  font-size: 0.82rem; font-weight: 600; color: var(--accent);
+  text-transform: uppercase; letter-spacing: 0.12em;
+  margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.r-section-title::before {
+  content: ''; width: 3px; height: 16px; border-radius: 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+}
+.r-about { color: var(--text2); font-size: 0.95rem; line-height: 2; font-weight: 300; }
+/* 简历 exp card */
+.r-exp-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 28px 28px 24px; margin-bottom: 16px; transition: all 0.25s;
+  position: relative; overflow: hidden;
+}
+.r-exp-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  opacity: 0; transition: opacity 0.25s;
+}
+.r-exp-card:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.r-exp-card:hover::before { opacity: 1; }
+.r-exp-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px; }
+.r-exp-company { font-size: 1.05rem; font-weight: 600; }
+.r-exp-role { color: var(--accent); font-size: 0.82rem; margin-top: 2px; }
+.r-exp-period { color: #fb923c; font-size: 0.76rem; background: rgba(251,146,60,0.08); padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+.r-exp-bg { color: var(--text3); font-size: 0.8rem; margin-bottom: 14px; border-left: 2px solid var(--border); padding-left: 10px; line-height: 1.7; }
+.r-exp-details { list-style: none; padding: 0; margin: 0 0 18px; }
+.r-exp-details li { color: var(--text2); font-size: 0.87rem; padding: 6px 0 6px 18px; position: relative; line-height: 1.85; font-weight: 300; border-bottom: 1px solid rgba(148,163,184,0.05); }
+.r-exp-details li:last-child { border-bottom: none; }
+.r-exp-details li::before { content: ''; position: absolute; left: 2px; top: 14px; width: 6px; height: 6px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); opacity: 0.7; }
+.r-hl { color: #99f6e4; font-weight: 500; }
+.r-tech-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.r-tech-tag { background: rgba(45,212,191,0.07); border: 1px solid rgba(45,212,191,0.18); color: var(--accent2); font-size: 0.7rem; padding: 2px 10px; border-radius: 20px; }
+/* 简历 skills */
+.r-skills-list { list-style: none; padding: 0; }
+.r-skills-list li { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 22px; margin-bottom: 8px; display: flex; align-items: flex-start; gap: 20px; transition: all 0.25s; }
+.r-skills-list li:hover { border-color: var(--border-hover); background: var(--card-hover); }
+.r-skill-cat { font-weight: 600; color: var(--accent); font-size: 0.82rem; min-width: 90px; flex-shrink: 0; }
+.r-skill-items { color: var(--text2); font-size: 0.84rem; line-height: 1.7; font-weight: 300; }
+/* 简历 timeline */
+.r-internship-list { position: relative; padding-left: 24px; }
+.r-internship-list::before { content: ''; position: absolute; left: 7px; top: 28px; bottom: 28px; width: 2px; background: linear-gradient(180deg, var(--accent), var(--accent2), transparent); opacity: 0.2; border-radius: 1px; }
+.r-internship-list .r-exp-card::after { content: ''; position: absolute; left: -21px; top: 32px; width: 8px; height: 8px; border-radius: 50%; background: var(--card); border: 2px solid var(--accent); transition: background 0.25s; }
+.r-internship-list .r-exp-card:hover::after { background: var(--accent); }
+.r-currently-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.7rem; color: #4ade80; font-weight: 500; margin-left: 8px; vertical-align: middle; }
+.r-currently-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #4ade80; animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.8); } }
+.r-footer { text-align: center; margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--text3); font-size: 0.78rem; }
+/* 简历页侧边装饰 */
+.r-side-deco { position: fixed; z-index: 0; pointer-events: none; opacity: 0.15; }
+.r-side-deco.lt { top: 8%; left: 2%; width: 180px; height: 180px; border: 2px solid #2dd4bf; border-radius: 50%; animation: floatA 8s ease-in-out infinite; }
+.r-side-deco.lm { top: 45%; left: 3%; width: 60px; height: 60px; border: 2px solid #5eead4; border-radius: 12px; animation: floatB 7s ease-in-out infinite; }
+.r-side-deco.rt { top: 12%; right: 2%; width: 100px; height: 100px; border: 2px solid #5eead4; border-radius: 16px; animation: floatB 8s ease-in-out infinite reverse; }
+.r-side-deco.rm { top: 50%; right: 3%; width: 140px; height: 140px; border: 2px solid #2dd4bf; border-radius: 50%; animation: floatA 9s ease-in-out infinite; }
+@keyframes floatA { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(8deg); } }
+@keyframes floatB { 0%,100% { transform: rotate(45deg) translateY(0); } 50% { transform: rotate(55deg) translateY(-24px); } }
+
+/* ===== Responsive ===== */
+@media (max-width: 720px) {
+  .hero h1 { font-size: 1.9rem; }
+  .offer-grid { grid-template-columns: 1fr; }
+  .container { padding: 48px 16px 60px; }
+  .mode-toggle { top: 12px; right: 12px; padding: 5px 12px 5px 10px; }
+  .r-exp-header { flex-direction: column; gap: 4px; }
+  .r-skills-list li { flex-direction: column; gap: 4px; }
+  .r-internship-list { padding-left: 18px; }
+  .r-side-deco { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- 右上角 Toggle -->
+<div class="mode-toggle" id="modeToggle" title="切换模式">
+  <span class="toggle-icon" id="toggleIcon">📄</span>
+  <span class="toggle-label" id="toggleLabel">简历</span>
+  <div class="toggle-track"><div class="toggle-thumb"></div></div>
+</div>
+
+<!-- ==================== 产品介绍页 ==================== -->
+<div id="coaching-page">
+<div class="container">
+
+  <!-- Hero -->
+  <div class="hero fade-in">
+    <h1>简历 · 面试 · 职场辅导</h1>
+    <p class="subtitle">我拥有内容方向，电商方向，直播方向的运营以及策略岗位工作经历<br><span style="font-size:0.88rem;opacity:0.85;">兴趣岛【内容/新媒体运营】→ 喜马拉雅【内容电商运营/直播运营】→ 谷雨【电商运营/直播运营】→ 快手【主播供给增长/直播供给策略/活动运营】</span></p>
+    <div class="contact-bar">
+      <span class="wechat-tag" onclick="copyWechat(this)">
+        💬 微信：14758729121（点击复制）
+      </span>
+    </div>
+    <div>
+      <span class="price-badge">🎯 20元 / 半小时 · 腾讯会议 1v1</span>
+    </div>
+  </div>
+
+  <!-- 适合谁 -->
+  <div class="section fade-in">
+    <div class="section-title">这个产品适合什么样的同学？</div>
+    <ul class="who-list">
+      <li class="who-item fade-in">
+        <span class="who-emoji">🌱</span>
+        <span class="who-text"><strong>还没有实习经历</strong>，对岗位有初步的了解，但是不清楚日常工作是做什么的，这个方向有没有前景，简历应该怎么准备</span>
+      </li>
+      <li class="who-item fade-in">
+        <span class="who-emoji">🎯</span>
+        <span class="who-text"><strong>有了一段实习，想跳到更好的公司</strong>，却总觉得有点吃力——投了梦想公司 n 次，没有一次回音</span>
+      </li>
+      <li class="who-item fade-in">
+        <span class="who-emoji">💼</span>
+        <span class="who-text"><strong>现在正在实习</strong>，但总觉得没学到什么，干的都是脏活，不知道怎么挖掘价值</span>
+      </li>
+      <li class="who-item fade-in">
+        <span class="who-emoji">🧭</span>
+        <span class="who-text"><strong>不太清楚未来方向</strong>，对职业规划一直在做加法，越想越乱，需要有人帮你梳理</span>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 我能提供什么 -->
+  <div class="section fade-in">
+    <div class="section-title">我能提供什么？</div>
+    <div class="offer-grid">
+      <div class="offer-card fade-in">
+        <div class="offer-icon">📝</div>
+        <div class="offer-title">简历 & 面试辅导</div>
+        <div class="offer-desc">针对目标岗位优化简历表达，梳理面试逻辑与高频问题，让你的经历更有说服力</div>
+      </div>
+      <div class="offer-card fade-in">
+        <div class="offer-icon">🔑</div>
+        <div class="offer-title">职场资源最大化</div>
+        <div class="offer-desc">告诉你怎么在现有实习中挖掘真正有价值的经历，让每段经历都成为下一段的跳板</div>
+      </div>
+      <div class="offer-card fade-in">
+        <div class="offer-icon">🗺️</div>
+        <div class="offer-title">未来方向讨论</div>
+        <div class="offer-desc">一起拆解你的兴趣与经历，产出清晰的方向判断和简历定位，不再焦虑地乱做加法</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 我做过什么 -->
+  <div class="section fade-in">
+    <div class="section-title">我做过什么？</div>
+    <div class="timeline">
+      <div class="timeline-item fade-in">
+        <div class="timeline-company">快手<span class="currently-dot">当前</span></div>
+        <div class="timeline-tags" style="margin-bottom:10px;">
+          <span class="timeline-tag">主播供给增长</span>
+          <span class="timeline-tag">直播供给策略</span>
+          <span class="timeline-tag">活动运营</span>
+        </div>
+        <ul class="who-list" style="gap:6px;">
+          <li class="timeline-detail">主导「导师制」大带小玩法落地，活动期间用户主动看播心智同比提升 <strong>35%</strong>，主播跃迁率 <strong>17%</strong></li>
+          <li class="timeline-detail">搭建活动监控体系，社群触达 <strong>5000+ 主播</strong>，推动二期参与人数提升 <strong>35%</strong>，任务达成率提升 <strong>45%</strong></li>
+          <li class="timeline-detail">推动报名链路升级为 H5 自助认领，报名转化效率提升 <strong>96 倍</strong></li>
+        </ul>
+      </div>
+      <div class="timeline-item fade-in">
+        <div class="timeline-company">谷雨</div>
+        <div class="timeline-tags" style="margin-bottom:10px;">
+          <span class="timeline-tag">电商运营</span>
+          <span class="timeline-tag">直播运营</span>
+        </div>
+        <ul class="who-list" style="gap:6px;">
+          <li class="timeline-detail">搭建直播数据监控与预警体系，干预后分时 GMV 贡献率回升至 <strong>7%-8%</strong>，多场大场爆发系数稳定 <strong>3.50+</strong></li>
+          <li class="timeline-detail">推进联名活动与明星进店双开直播，活动 GMV 爆发系数达 <strong>2.43</strong>，沉淀方法论 SOP</li>
+          <li class="timeline-detail">负责商城选品与投流调配，执行后商城 GMV 月环比提升 <strong>95%</strong></li>
+        </ul>
+      </div>
+      <div class="timeline-item fade-in">
+        <div class="timeline-company">喜马拉雅</div>
+        <div class="timeline-tags" style="margin-bottom:10px;">
+          <span class="timeline-tag">内容电商运营</span>
+          <span class="timeline-tag">直播运营</span>
+        </div>
+        <ul class="who-list" style="gap:6px;">
+          <li class="timeline-detail">孵化主播 <strong>5 人</strong>，直播平均转化率达 <strong>7%</strong></li>
+          <li class="timeline-detail">优化直播脚本适配抖音推流机制，平均转化率达 <strong>11%</strong></li>
+          <li class="timeline-detail">漏斗模型拆解全链路，定位流失点后直播转化率提升 <strong>20%</strong></li>
+        </ul>
+      </div>
+      <div class="timeline-item fade-in">
+        <div class="timeline-company">兴趣岛</div>
+        <div class="timeline-tags" style="margin-bottom:10px;">
+          <span class="timeline-tag">内容运营</span>
+          <span class="timeline-tag">新媒体运营</span>
+        </div>
+        <ul class="who-list" style="gap:6px;">
+          <li class="timeline-detail">视频号 1 个月增粉 <strong>1.2w</strong>、播放量 <strong>65w</strong>，公众号文章平均阅读 <strong>800+</strong></li>
+          <li class="timeline-detail">设计导流 SOP 并量化验证，单月内容转化体验学员 <strong>100+</strong></li>
+        </ul>
+      </div>
+    </div>
+    <p style="font-size:0.8rem;color:var(--text3);margin-top:16px;text-align:center;">
+      💡 点击右上角「简历」可进一步了解完整经历
+    </p>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section fade-in">
+    <h3>想聊聊？</h3>
+    <p>20元半小时，腾讯会议 1v1，核心诉求直接解决</p>
+    <button class="cta-wechat" onclick="copyWechat(this)">
+      💬 添加微信：14758729121（点击复制）
+    </button>
+    <div class="cta-note">复制微信号后，直接搜索添加即可</div>
+  </div>
+
+  <div class="footer fade-in">做有意思的事 · 帮有想法的人</div>
+</div>
+</div>
+
+<!-- ==================== 简历页 ==================== -->
+<div id="resume-page">
+  <div class="r-side-deco lt"></div>
+  <div class="r-side-deco lm"></div>
+  <div class="r-side-deco rt"></div>
+  <div class="r-side-deco rm"></div>
+  <div class="resume-wrap" id="resumeApp"></div>
+</div>
+
+<script>
+// ===== 简历数据 =====
+const resumeData = {
+  profile: { name: "Daisy", role: "直播运营 / 电商运营", slogan: "用数据驱动决策，用增长验证策略。", contact: "欢迎联系" },
+  about: "专注直播运营与电商增长方向，具备从指标体系搭建、活动策略设计到跨部门协同的全链路运营能力。擅长通过数据分析定位业务问题，提炼 SOP 并推动团队复用，拥有快手、喜马拉雅等平台的实战经验。",
+  internships: [
+    {
+      company: "快手", role: "直播活动运营实习生", period: "2026.03 - 至今", current: true,
+      bg: "负责平台主播成长类活动全链路执行，主导「导师制」大带小玩法落地，服务新小主播跃迁与平台看播增长目标。",
+      details: [
+        "**活动策略设计与迭代**：复盘发现过程指标到结果指标（主动心智）传导效率低，拆解行为路径后提出「粉丝增长量 + 直播分享量」作为新过程指标，完成验证与落地，活动期间用户主动看播心智同比提升 **35%**，主播跃迁率 **17%**",
+        "**指标监控与项目推进**：搭建活动监控体系，跟踪任务达成与风险点，社群触达 **5000+ 主播**，独立完成活动复盘分析并输出优化建议",
+        "**活动复盘与问题诊断**：基于数据分析与典型案例挖掘，定位「活动声量不足、主播初期开播活力弱」两大核心问题并推动优化方案落地，二期参与人数提升 **35%**，任务总达成率提升 **45%**",
+        "**流程产品化优化**：推动报名链路从腾讯文档人工报名升级为 H5 自助认领，完成流程设计、审批与协同答疑，沉淀团队可复用 SOP，报名转化效率提升 **96 倍**"
+      ],
+      tech: ["指标体系", "活动运营", "数据复盘", "流程优化", "SOP沉淀"]
+    },
+    {
+      company: "谷雨", role: "电商直播运营实习生", period: "2025.09 - 2026.01", current: false,
+      bg: "负责快手渠道店铺货架与自播直播间全流程运营，支撑多场大促直播与达人合作项目落地。",
+      details: [
+        "**数据监控与预警体系**：围绕北极星指标搭建日/周报分析体系，基于历史达标场次建立目标进度基准线并设定分层预警阈值，实现直播场中异常实时识别与干预；干预后分时 GMV 贡献率由不足 **5%** 回升至 **7%-8%**，多场大场直播爆发系数稳定 **3.50+**，并总结为 SOP 供团队复用",
+        "**直播活动运营**：推进联名官宣活动，统筹人货场与跨部门资源，制定并落地执行方案；活动 GMV 爆发系数达 **2.43**，活动时段 GMV 达 **2w**",
+        "**达播合作运营**：跨部门推进明星进店双开直播合作，制定营销策略与货盘方案，独立复盘并沉淀方法论；多场直播 GMV 爆发系数稳定 **3.50+**",
+        "**爆品孵化与商城增长**：负责商城选品与投流资源调配，通过销售数据分析、商品画像与竞品调研完成系统分层，制定差异化经营策略；执行后商城板块 GMV 月环比提升 **95%**"
+      ],
+      tech: ["电商直播", "数据监控", "GMV增长", "达播运营", "选品投流"]
+    },
+    {
+      company: "喜马拉雅", role: "直播运营实习生", period: "2025.06 - 2025.09", current: false,
+      bg: "负责知识付费产品 IP 孵化中的获客直播运营，覆盖直播执行到用户承接转化全流程。",
+      details: [
+        "**主播孵化**：搭建账号基建、培训主播并复盘迭代，成功孵化主播 **5 人**，直播平均转化率达 **7%**",
+        "**直播脚本优化**：基于用户痛点调研与平台推流机制，输出适配抖音直播间的通用脚本，平均转化率达 **11%**",
+        "**漏斗复盘与优化**：通过漏斗模型拆解直播全链路，精准定位关键流失点并推动策略落地，直播转化率提升 **20%**"
+      ],
+      tech: ["主播孵化", "内容运营", "转化率优化", "漏斗分析"]
+    },
+    {
+      company: "兴趣岛", role: "运营实习生", period: "2024.10 - 2025.03", current: false,
+      bg: "负责知识付费 IP 课程的私域直播运营与 IP 账号打造。",
+      details: [
+        "**账号运营与内容创作**：负责 IP 人设账号全平台运营，独立完成海报设计（可画/PS）、视频剪辑（剪映）与多平台分发（视频号/公众号）",
+        "**导流 SOP 设计与增长**：设计并量化验证导流 SOP，沉淀为团队标准流程；视频号 1 个月增粉 **1.2w**、播放量 **65w**，公众号文章平均阅读量 **800+**，单月内容转化体验学员 **100+**"
+      ],
+      tech: ["私域运营", "内容创作", "IP账号", "SOP设计"]
+    }
+  ],
+  skills: [
+    { category: "数据分析", items: ["SQL（子查询、窗口函数、Join等复杂查询）", "Excel（Vlookup、透视表）", "Tableau（看板搭建、数据可视化）", "Python（pandas、numpy、scipy、matplotlib）"] },
+    { category: "AI 工具", items: ["AI智能体搭建", "自动化工作流设计", "业务流程提效（数据处理效率提升96倍）"] },
+    { category: "运营能力", items: ["指标体系搭建", "活动策略设计", "数据复盘", "SOP沉淀", "跨部门协同"] },
+    { category: "语言", items: ["英语 CET-6，良好听说读写能力，可阅读英文材料"] },
+    { category: "其他", items: ["计算机二级证书"] }
+  ]
+};
+
+function rHl(text) {
+  return text.replace(/\*\*(.+?)\*\*/g, '<span class="r-hl">$1</span>');
+}
+
+function renderResume() {
+  const d = resumeData;
+  let html = `
+  <div class="r-header fade-in">
+    <h1>${d.profile.name}</h1>
+    <div class="r-role">${d.profile.role}</div>
+    <div class="r-slogan">"${d.profile.slogan}"</div>
+    <div class="r-contact">${d.profile.contact}</div>
+  </div>
+  <div class="r-section fade-in">
+    <div class="r-section-title">关于我</div>
+    <div class="r-about">${d.about}</div>
+  </div>
+  <div class="r-section fade-in">
+    <div class="r-section-title">实习经历</div>
+    <div class="r-internship-list">
+      ${d.internships.map(i => `
+        <div class="r-exp-card fade-in">
+          <div class="r-exp-header">
+            <div>
+              <div class="r-exp-company">${i.company}${i.current ? '<span class="r-currently-badge">当前</span>' : ''}</div>
+              <div class="r-exp-role">${i.role}</div>
+            </div>
+            <div class="r-exp-period">${i.period}</div>
+          </div>
+          <div class="r-exp-bg">${i.bg}</div>
+          <ul class="r-exp-details">${i.details.map(d => `<li>${rHl(d)}</li>`).join('')}</ul>
+          <div class="r-tech-row">${i.tech.map(t => `<span class="r-tech-tag">${t}</span>`).join('')}</div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+  <div class="r-section fade-in">
+    <div class="r-section-title">技能 & 工具</div>
+    <ul class="r-skills-list">
+      ${d.skills.map(s => `
+        <li class="fade-in">
+          <span class="r-skill-cat">${s.category}</span>
+          <span class="r-skill-items">${s.items.join('　·　')}</span>
+        </li>
+      `).join('')}
+    </ul>
+  </div>
+  <div class="r-footer fade-in">Made with purpose, not perfection.</div>`;
+  return html;
+}
+
+// ===== Toggle 切换 =====
+let currentMode = 'coaching';
+const modeToggle = document.getElementById('modeToggle');
+const toggleLabel = document.getElementById('toggleLabel');
+const toggleIcon = document.getElementById('toggleIcon');
+const coachingPage = document.getElementById('coaching-page');
+const resumePage = document.getElementById('resume-page');
+const resumeApp = document.getElementById('resumeApp');
+let resumeRendered = false;
+
+modeToggle.addEventListener('click', () => {
+  coachingPage.classList.add('page-switching');
+  setTimeout(() => {
+    if (currentMode === 'coaching') {
+      currentMode = 'resume';
+      document.body.classList.add('resume-mode');
+      toggleLabel.textContent = '辅导';
+      toggleIcon.textContent = '🏠';
+      if (!resumeRendered) {
+        resumeApp.innerHTML = renderResume();
+        resumeRendered = true;
+      }
+      window.scrollTo(0, 0);
+      observeFadeIns();
+    } else {
+      currentMode = 'coaching';
+      document.body.classList.remove('resume-mode');
+      toggleLabel.textContent = '简历';
+      toggleIcon.textContent = '📄';
+      window.scrollTo(0, 0);
+      observeFadeIns();
+    }
+    coachingPage.classList.remove('page-switching');
+  }, 300);
+});
+
+// ===== 微信复制 =====
+function copyWechat(el) {
+  const wechatId = '14758729121';
+  navigator.clipboard.writeText(wechatId).then(() => {
+    const original = el.innerHTML;
+    el.innerHTML = '✅ 已复制微信号！';
+    setTimeout(() => { el.innerHTML = original; }, 2000);
+  }).catch(() => {
+    alert('微信号：' + wechatId);
+  });
+}
+
+// ===== 滚动淡入 =====
+const STAGGER_GROUPS = [
+  { selector: '#coaching-page .who-item', delay: 80 },
+  { selector: '#coaching-page .offer-card', delay: 100 },
+  { selector: '#coaching-page .timeline-item', delay: 90 },
+];
+
+// 预设 stagger delay
+function applyStaggerDelay() {
+  STAGGER_GROUPS.forEach(({ selector, delay }) => {
+    document.querySelectorAll(selector).forEach((el, i) => {
+      el.style.transitionDelay = (i * delay) + 'ms';
+    });
+  });
+}
+applyStaggerDelay();
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.06, rootMargin: '0px 0px -30px 0px' });
+
+function observeFadeIns() {
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+observeFadeIns();
+</script>
+</body>
+</html>
